@@ -1,0 +1,17 @@
+{
+  "name": "greeter-bot",
+  "version": "1.0.0",
+  "description": "My own Discord bot",
+  "main": "bot.js",
+  "author": "YOUR-NAME-HERE",
+  "dependencies": {
+    "bufferutil": "^3.0.3",
+    "discord.io": "github:woor/discord.io#gateway_v6",
+    "discord.js": "^11.3.2",
+    "libsodium-wrappers": "^0.7.3",
+    "opusscript": "0.0.6",
+    "request": "^2.85.0",
+    "uws": "^9.14.0",
+    "winston": "^2.4.1"
+  }
+}
