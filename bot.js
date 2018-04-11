@@ -7,6 +7,16 @@ const prefix = '!';
 // Initialize Discord Bot
 const bot = new Discord.Client();
 
+
+const commands = [
+            { name: 'help', description: 'output all commands and description for them'},
+            { name: 'ping', description: ' You like to play ping-pong just type it'},
+            { name: 'hi', description: 'make the bot your slave and order him to greet You.'},
+            { name: 'date', description: 'outputs current date and time'},
+            { name: 'weather \'CityName\'', description: 'outputs current weather in Your city'},
+            { name: 'meme', description: 'outputs random meme image (still in progress)'}
+        ];
+
 bot.on('ready', () => {
     console.log('Connected');
     console.log('Logged in as: ');
@@ -21,7 +31,12 @@ bot.on('message',   message => {
     var command = args[0];
 
     switch (command) {
-            case 'ping':
+
+            case 'help':
+                    outputHelp(message)
+                    break;
+
+            case commands[1].name:
                     message.reply('Pong!');
                     break;
 
@@ -156,5 +171,17 @@ bot.on('guildMemberAdd', (member) => {
   member.addRole('432950017272184843','You are new here.');
 
 });
+
+function outputHelp(message) {
+
+    var embed = new Discord.RichEmbed();
+    embed.setColor('#0066ff');
+    for (var cmd in commands) {
+        embed.addField(commands[cmd].name, commands[cmd].description);
+
+    }
+
+    message.channel.send(embed);
+}
 
 bot.login(config.token);
