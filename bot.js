@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const config = require('./config.json');
-const APPID = "7ab46cfe137338d9856c5fb96c3da511";
+//const APPID = "7ab46cfe137338d9856c5fb96c3da511";
+//const
 var request = require('request');
 
 const prefix = '!';
@@ -14,7 +15,8 @@ const commands = [
             { name: 'hi', description: 'make the bot your slave and order him to greet You.'},
             { name: 'date', description: 'outputs current date and time'},
             { name: 'weather \'CityName\'', description: 'outputs current weather in Your city'},
-            { name: 'meme', description: 'outputs random meme image (still in progress)'}
+            { name: 'meme', description: 'outputs random meme image (still in progress)'},
+            { name:'giffy', description: 'outputs some funny gif probably'}
         ];
 
 bot.on('ready', () => {
@@ -59,13 +61,30 @@ bot.on('message',   message => {
                     getMeme(message);
                     break;
 
-            case 'urban':
-                    console.log(args.slice(1));
+            case 'giffy':
+                    getGiffy(message);
                     break;
          }
 
 });
 
+
+function getGiffy(message) {
+        var url="https://api.giphy.com/v1/gifs/random?" + "api_key=" + config.giffyApiKey;
+
+        request(url, async function(error, response, body){
+            if (!error && response.statusCode == 200) {
+              console.log('error:', error); // Print the error if one occurred
+              console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+              var toSend = JSON.parse(body);
+              message.channel.send(toSend.data.url);
+          } else {
+            console.log("Error: "+ error);
+            console.log("Response: " + response);
+            message.reply("This meme is to good for you, try later.");
+          }
+        });
+}
 
 function getMeme(message) {
     var url = 'https://api.imgflip.com/get_memes';
@@ -77,7 +96,7 @@ function getWeather(location, message) {
 
   var url = "http://api.openweathermap.org/data/2.5/weather?"+
   "q=" + location +
-  "&appid=" + APPID;
+  "&appid=" + config.weatherApiKey;
 
   sendRequest(url, message);
 
