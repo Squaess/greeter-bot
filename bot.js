@@ -16,7 +16,8 @@ const commands = [
             { name: 'date', description: 'outputs current date and time'},
             { name: 'weather \'CityName\'', description: 'outputs current weather in Your city'},
             { name: 'meme', description: 'outputs random meme image (still in progress)'},
-            { name:'giffy', description: 'outputs some funny gif probably'}
+            { name:'giffy', description: 'outputs some funny gif probably'},
+            { name: 'fruits', description: 'prints some ftuit emojis'}
         ];
 
 bot.on('ready', () => {
@@ -63,6 +64,45 @@ bot.on('message',   message => {
 
             case 'giffy':
                     getGiffy(message);
+                    break;
+
+            case 'fruits':
+                    message.react('🍎')
+                        .then(() => message.react('🍊'))
+                        .then(() => message.react('🍇'))
+                        .catch(() => console.error('One of the emojis failed to react.'));
+                    break;
+            case 'me':
+                    console.dir(message.author);
+                    break;
+
+            case 'change_nick':
+                    if (message.author.id == '199497168849993728' && message.author.username == 'Aedd') {
+                        if (args.length != 3) {
+                          message.channel.send("Something wrong with arguments bro...");
+                        } else {
+                          message.channel.send('I will change ' + args[1] + ' to ' + args[2]);
+                          var usr = bot.users.find('username', args[1]);
+                          var mem = message.guild.member(usr);
+                          mem.setNickname(args[2], 'Admin said that')
+                                .then(console.log("Changed the nickname"))
+                                .catch(console.error('I dont know'));
+                        }
+                    } else {
+                      message.channel.send('You dont deserve to do this.');
+                    }
+                    break;
+
+            case 'get_users':
+                    if (message.author.id == '199497168849993728' && message.author.username == 'Aedd') {
+                        var arr = message.guild.members.map( m => m.user.username);
+                        console.log(arr.length);
+                        console.log(arr);
+                        message.reply(arr);
+                    } else {
+                      message.channel.send('You dont deserve to do this.');
+                    }
+
                     break;
          }
 
@@ -148,13 +188,8 @@ function computeOutput(obj, message){
       tmp = (obj.main.temp-272.15),
       hum = obj.main.humidity,
       pres = obj.main.pressure;
-/*
-  var msg = "Weather in " + cityName + "\n" +
-            "Temperature: " + tmp + " celcius\n" +
-            "Pressure: " + pres + " hPa\n" +
-            "Humidity: " + hum +"%";
-*/
-    var embed = new Discord.RichEmbed()
+
+  var embed = new Discord.RichEmbed()
                 .setColor('#EFFF00')
                 .setTitle("Weather in " + cityName)
                 .setURL('https://openweathermap.org/')
